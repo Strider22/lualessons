@@ -1,6 +1,6 @@
 -- IO library http://www.lua.org/pil/21.html
 
-local angleLookup = {m=5, r=7, z=6, e=22, o=12,l=15, a=35, w=21, u=25, t=36, f=-23}
+local angleLookup = {m=80, r=73, z=73, e=67, o=144,l=101, a=39, w=123, u=158, t=106, f=111, i=55}
 
 local f = io.open("phonemes","r")
 local line = f:read("*l")
