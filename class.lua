@@ -1,3 +1,4 @@
+-- This code uses a separate personClass
 require "personClass"
 
 -- like static class
