@@ -1,13 +1,4 @@
--- http://lua-users.org/wiki/SplitJoin
-
--- If God is good, and created the universe, why is there such trouble in the world?
-local phrase = "If God is good and created the universe why is there such trouble in the world"
-
-function SplitStringByWords(myString)
-  for i in (string.gmatch(myString, "%S+")) do 
-    print(i)
-  end
-end
+-- http://www.wellho.net/resources/ex.php4?item=u106/rmv
 
 function SplitStringByCount(myString,count)
   return myString:sub(1,count), myString:sub(count+1)
@@ -19,7 +10,6 @@ end
 --  Main code
 --
 --*********************************************************************************************
-SplitStringByWords(phrase)
 
 print("\n[Split at 3]\n")
 local string1, string2 = SplitStringByCount("universe",3)

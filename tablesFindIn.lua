@@ -1,4 +1,5 @@
 -- http://www.tutorialspoint.com/lua/lua_tables.htm
+-- see also textToAngles.lua
 
 myTable = {"banana", "orange", "apple", "grapes"}
 

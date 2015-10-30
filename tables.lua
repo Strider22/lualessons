@@ -30,7 +30,8 @@ for k,v in ipairs(table2) do
     print("key " .. k .. " value " .. v)
 end
 
-print("Values for myTable: Notice that the first value is changed")
-for k,v in ipairs(myTable) do
+newTable = {hello="Hello World", next="Don't use ipairs", final="keys are not indicies"}
+for k,v in pairs(newTable) do
     print("key " .. k .. " value " .. v)
 end
+

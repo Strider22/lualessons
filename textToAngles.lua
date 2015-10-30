@@ -1,3 +1,5 @@
+-- next step - convert a word to phonemes
+
 -- IO library http://www.lua.org/pil/21.html
 
 -- If God is good, and created the universe, why is there such trouble in the world?
@@ -25,30 +27,93 @@ function printAngle(line)
     end
 end
 
+-- ignore e at the end of a word
+-- long if only one consonant between
+-- y at end i
 
-local letterToPhoneme = {a="ai", b="mbp", c="etc", d="etc", e="e", f="fv", g="etc", h="etc", i="e",
-    j="etc", k="etc", l="l", m="mbp", n="etc", o="o", p="mbp", q="qw",
-    r="etc", s="etc", t="etc", u="u",
-    v="fv", w="qw", x="etc", y="etc", z="etc"}
+
+local phonemeMap = {}
+phonemeMap[1] = {
+    a = "ai",
+    b = "mbp",
+    c = "etc",
+    d = "etc",
+    e = "e",
+    f = "fv",
+    g = "etc",
+    h = "etc",
+    i = "e",
+    j = "etc",
+    k = "etc",
+    l = "l",
+    m = "mbp",
+    n = "etc",
+    o = "o",
+    p = "mbp",
+    q = "qw",
+    r = "etc",
+    s = "etc",
+    t = "etc",
+    u = "u",
+    v = "fv",
+    w = "qw",
+    x = "etc",
+    y = "etc",
+    z = "etc"
+}
+phonemeMap[2] = { oo = "u", oa = "o", ee = "e", ea = "e", ch = "etc", th = "etc", gh = "fv", ou = "u" }
+phonemeMap[3] = { igh = "ai" }
+phonemeMap[4] = { eigh = "ai" }
+
+function findPhonemeInList(phrase, len, stringList)
+    if phrase:len() < len then
+        return nil
+    end
+
+    local phoneme = stringList[phrase:sub(1,len)]
+    if(phoneme ~nil) then
+      return phoneme, phrase:sub(len+1)
+end
+
+
+function findPhoneme(phrase)
+    for i=4,1,-1 do
+        local phoneme = findPhonemeInList(phrase,i,phonemeMap[i])
+          if (phoneme ~= nil) then
+            return phoneme
+          end
+    end
+    return nil
+end
+
+function SplitStringByCount(myString,count)
+    return myString:sub(1,count), myString:sub(count+1)
+end
 
 function printPhonemes(phrase)
     local answer
-    for i=1,phrase:len(),1 do
-        local letter = phrase:sub(i,i)
-        answer = letterToPhoneme[letter]
-        if answer then
-            print(letter .. " - " .. answer)
-        end
+    local strLen = phrase.len()
+end
 
+function dump(table)
+    for k,v in pairs(table) do
+        print("key " .. k .. " value " .. v)
     end
 end
 
---*********************************************************************************************
---
---  Main code
---
---*********************************************************************************************
+--[[*********************************************************************************************
+
+  Main code
+
+*********************************************************************************************]]
+--print(phonemeMap[1])
+dump(phonemeMap[4])
+local phoneme = findPhonemeInList("eigh",4,phonemeMap[4])
+if phoneme then print("phoneme " .. phoneme) end
+phoneme = findPhoneme("k")
+if phoneme then print("phoneme found " .. phoneme) end
+--[[
 local line = readLine("phonemes")
 printAngle(line)
 printPhonemes(phrase)
-
+]]
