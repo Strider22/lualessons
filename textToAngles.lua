@@ -66,27 +66,26 @@ phonemeMap[3] = { igh = "ai" }
 phonemeMap[4] = { eigh = "ai" }
 
 function findPhonemeInList(phrase, len, stringList)
-    if phrase:len() < len then
-        return nil
-    end
-
-    local phoneme = stringList[phrase:sub(1,len)]
-    if(phoneme ~nil) then
-      return phoneme, phrase:sub(len+1)
+    return stringList[phrase:sub(1,len)]
 end
 
 
-function findPhoneme(phrase)
-    for i=4,1,-1 do
-        local phoneme = findPhonemeInList(phrase,i,phonemeMap[i])
-          if (phoneme ~= nil) then
-            return phoneme
-          end
+function findNextPhoneme(word)
+    local wordLen = word:len()
+    if wordLen < 1 then return nil, nil end
+    local len = 4
+    if wordLen < len then len = wordLen end
+    for i=len,1,-1 do
+      local phrase, remainder = splitStringByCount(word,i)
+      local phoneme = findPhonemeInList(phrase,i,phonemeMap[i])
+      if phoneme ~= nil then 
+        return phoneme, remainder
+      end
     end
-    return nil
+    print("Error, i = ".. i .. " phrase = " .. phrase .. " and no phoneme found")
 end
 
-function SplitStringByCount(myString,count)
+function splitStringByCount(myString,count)
     return myString:sub(1,count), myString:sub(count+1)
 end
 
@@ -101,17 +100,28 @@ function dump(table)
     end
 end
 
+function findPhonemesInWord(word)
+  local phonemeList = {}
+  local phoneme
+  while word ~= "" do
+    phoneme, word = findNextPhoneme(word)
+    table.insert(phonemeList, phoneme)
+    --print("phoneme " .. phoneme .. " remainder " .. word)
+  end
+  dump(phonemeList)
+end
 --[[*********************************************************************************************
 
   Main code
 
 *********************************************************************************************]]
 --print(phonemeMap[1])
-dump(phonemeMap[4])
-local phoneme = findPhonemeInList("eigh",4,phonemeMap[4])
-if phoneme then print("phoneme " .. phoneme) end
-phoneme = findPhoneme("k")
-if phoneme then print("phoneme found " .. phoneme) end
+--dump(phonemeMap[4])
+--local phoneme = findPhonemeInList("eigh",4,phonemeMap[4])
+--if phoneme then print("phoneme " .. phoneme) end
+--phoneme = findPhoneme("k")
+--if phoneme then print("phoneme found " .. phoneme) end
+findPhonemesInWord("universe")
 --[[
 local line = readLine("phonemes")
 printAngle(line)
