@@ -68,6 +68,8 @@ phonemeMap[2] = { oo = "u", oa = "o", ee = "e", ea = "e", ch = "etc", th = "etc"
 phonemeMap[3] = { igh = "ai" }
 phonemeMap[4] = { eigh = "ai" }
 
+phonemeSpecials = {wha={"qw","u"}, out={"ai","o","etc"}, }
+
 function findPhonemeInList(phrase, len, stringList)
     return stringList[phrase:sub(1,len)]
 end
