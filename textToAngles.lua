@@ -1,4 +1,7 @@
--- next step - convert a word to phonemes
+-- next steps
+-- turn phoneme list into switch frames, removing duplicates as needed (space out frames
+-- remove silent e
+-- special case handling (what - qw u etc; about - u mpb ai o etc)
 
 -- IO library http://www.lua.org/pil/21.html
 
@@ -61,7 +64,7 @@ phonemeMap[1] = {
     y = "etc",
     z = "etc"
 }
-phonemeMap[2] = { oo = "u", oa = "o", ee = "e", ea = "e", ch = "etc", th = "etc", gh = "fv", ou = "u" }
+phonemeMap[2] = { oo = "u", oa = "o", ee = "e", ea = "e", ch = "etc", th = "etc", gh = "fv", ou = "u", wh="qw"}
 phonemeMap[3] = { igh = "ai" }
 phonemeMap[4] = { eigh = "ai" }
 
@@ -70,7 +73,9 @@ function findPhonemeInList(phrase, len, stringList)
 end
 
 
+
 function findNextPhoneme(word)
+    word = string.lower(word)
     local wordLen = word:len()
     if wordLen < 1 then return nil, nil end
     local len = 4
@@ -82,7 +87,9 @@ function findNextPhoneme(word)
         return phoneme, remainder
       end
     end
-    print("Error, i = ".. i .. " phrase = " .. phrase .. " and no phoneme found")
+    -- if the phoneme is not found, assume it's punctuation and return etc
+    print("word " .. word .. " not found")
+    return "etc", remainder
 end
 
 function splitStringByCount(myString,count)
@@ -100,30 +107,27 @@ function dump(table)
     end
 end
 
-function findPhonemesInWord(word)
-  local phonemeList = {}
+function addPhonemesInWordToList(word, phonemeList)
   local phoneme
-  while word ~= "" do
+  while (word ~= "") and (word ~=nil) do
     phoneme, word = findNextPhoneme(word)
     table.insert(phonemeList, phoneme)
     --print("phoneme " .. phoneme .. " remainder " .. word)
+    --print("phoneme " .. phoneme)
   end
-  dump(phonemeList)
+end
+
+function buildPhonemeListFromPhrase(phrase,phonemeList)
+    for word in (string.gmatch(phrase, "%S+")) do
+        addPhonemesInWordToList(word,phonemeList)
+    end
 end
 --[[*********************************************************************************************
 
   Main code
 
 *********************************************************************************************]]
---print(phonemeMap[1])
---dump(phonemeMap[4])
---local phoneme = findPhonemeInList("eigh",4,phonemeMap[4])
---if phoneme then print("phoneme " .. phoneme) end
---phoneme = findPhoneme("k")
---if phoneme then print("phoneme found " .. phoneme) end
-findPhonemesInWord("universe")
---[[
-local line = readLine("phonemes")
-printAngle(line)
-printPhonemes(phrase)
-]]
+local phonemeList = {}
+buildPhonemeListFromPhrase("What are you talking about", phonemeList)
+--buildPhonemeListFromPhrase("What", phonemeList)
+dump(phonemeList)
