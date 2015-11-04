@@ -58,7 +58,12 @@ Phonemes.phonemeMap = {
     ou = { "u", "v" },
     wh = { "qw", "v" },
     igh = { "ai", "v" },
-    eigh = { "ai", "v" }
+    eigh = { "ai", "v" },
+    A = { "ai", "v" },
+    E = { "e", "v" },
+    I = { "ai", "v" },
+    U = { "o", "v" },
+    R = { "o", "v" }
 }
 
 Phonemes.phonemeSpecials = { wha = { { "qw", "v" }, { "u", "v" } }, out = { { "ai", "v" }, { "o", "v" }, { "etc", "c" } } }
@@ -69,7 +74,6 @@ end
 
 
 function Phonemes:findNextPhoneme(word)
-    word = string.lower(word)
     local wordLen = word:len()
     if wordLen < 1 then return nil, nil end
     local len = 4
@@ -116,3 +120,15 @@ function Phonemes:buildPhonemeListFromPhrase(phrase, phonemeList)
     end
 end
 
+function Phonemes:countPhonemes(phonemeList)
+    local numConsonants = 0
+    local numVowels = 0
+    for k, v in pairs(phonemeList) do
+        if v[2] == "v" then
+            numVowels = numVowels+1
+        else
+            numConsonants = numConsonants + 1
+        end
+    end
+    return numVowels, numConsonants
+end
