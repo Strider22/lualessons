@@ -34,46 +34,56 @@ end
 -- long if only one consonant between
 -- y at end i
 
-
-local phonemeMap = {}
-phonemeMap[1] = {
-    a = "ai",
-    b = "mbp",
-    c = "etc",
-    d = "etc",
-    e = "e",
-    f = "fv",
-    g = "etc",
-    h = "etc",
-    i = "e",
-    j = "etc",
-    k = "etc",
-    l = "l",
-    m = "mbp",
-    n = "etc",
-    o = "o",
-    p = "mbp",
-    q = "qw",
-    r = "etc",
-    s = "etc",
-    t = "etc",
-    u = "u",
-    v = "fv",
-    w = "qw",
-    x = "etc",
-    y = "etc",
-    z = "etc"
+--[[First element shows mouth position
+--second element shows length of time
+ -- c - only one frame
+ -- v - multiple frames
+ ]]
+local phonemeMap = {
+    a = {"ai", "v"},
+    b = {"mbp","c"},
+    c = {"etc","c"},
+    d = {"etc","c"},
+    e = {"e", "v"},
+    f = {"fv","v"},
+    g = {"etc","c"},
+    h = {"etc","c"},
+    i = {"e","v"},
+    j = {"etc","c"},
+    k = {"etc","c"},
+    l = {"l","v"},
+    m = {"mbp","v"},
+    n = {"etc","v"},
+    o = {"o","v"},
+    p = {"mbp","c"},
+    q = {"qw","c"},
+    r = {"etc","v"},
+    s = {"etc","v"},
+    t = {"etc","c"},
+    u = {"u","v"},
+    v = {"fv","v"},
+    w = {"qw","v"},
+    x = {"etc","v"},
+    y = {"etc","v"},
+    z = {"etc","v"},
+    oo = {"u","v"},
+    oa = {"o","v"},
+    ee = {"e","v"},
+    ea = {"e","v"},
+    ch = {"etc","c"},
+    th = {"etc","v"},
+    gh = {"fv","v"},
+    ou = {"u","v"},
+    wh = {"qw","v"},
+    igh = {"ai","v"},
+    eigh = {"ai","v" }
 }
-phonemeMap[2] = { oo = "u", oa = "o", ee = "e", ea = "e", ch = "etc", th = "etc", gh = "fv", ou = "u", wh="qw"}
-phonemeMap[3] = { igh = "ai" }
-phonemeMap[4] = { eigh = "ai" }
 
-phonemeSpecials = {wha={"qw","u"}, out={"ai","o","etc"}, }
+phonemeSpecials = {wha={{"qw","v"},{"u","v"}}, out={{"ai","v"},{"o","v"},{"etc","c"}}}
 
 function findPhonemeInList(phrase, len, stringList)
     return stringList[phrase:sub(1,len)]
 end
-
 
 
 function findNextPhoneme(word)
@@ -84,7 +94,7 @@ function findNextPhoneme(word)
     if wordLen < len then len = wordLen end
     for i=len,1,-1 do
       local phrase, remainder = splitStringByCount(word,i)
-      local phoneme = findPhonemeInList(phrase,i,phonemeMap[i])
+      local phoneme = findPhonemeInList(phrase,i,phonemeMap)
       if phoneme ~= nil then 
         return phoneme, remainder
       end
@@ -98,15 +108,15 @@ function splitStringByCount(myString,count)
     return myString:sub(1,count), myString:sub(count+1)
 end
 
-function printPhonemes(phrase)
-    local answer
-    local strLen = phrase.len()
-end
-
 function dump(table)
     for k,v in pairs(table) do
-        print("key " .. k .. " value " .. v)
+        if(type(v) == "table")then
+            dump(v)
+        else
+            print("key " .. k .. " value " .. v)
+        end
     end
+
 end
 
 function addPhonemesInWordToList(word, phonemeList)

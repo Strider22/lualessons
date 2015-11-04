@@ -4,7 +4,7 @@
 -- Lua is actually prototype based (classless)
 
 -- THIS USES FULLY PUBLIC CLASSES. SEE classClosureApproach DISCUSSION TO
--- UNDERSTAND WHY THAT IS RECOMMENDED
+-- UNDERSTAND WHY FULLY PUBLIC CLASSES ARE RECOMMENDED
 
 ------------------------------------------------------------------
 --
@@ -85,11 +85,23 @@ instance3.override()
 -- written by a single user. Also name space is probably
 -- best managed like Anime Studio ... MSMyClass
 ------------------------------------------------------------------
-require "shape"
+--[[require "shape"
 local shape1 = Shape.new()
 local shape2 = Shape.new()
 shape1.setCenter(1,1)
 shape1.print("shape1")
 shape2.print("shape2")
+]]
 
+-- Static Class example
+StaticClass = {}
+function StaticClass:phrase()
+    return "Hello World"
+end
+function StaticClass:hello()
+  print(self:phrase())
+end
+
+--hello()
+StaticClass:hello()
 
