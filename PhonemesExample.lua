@@ -3,7 +3,7 @@ require "Phonemes"
 -- local phrase = "If God is good and created the universe why is there such trouble in the world"
 --local phrase = "if god iz gud and crEAtid thu UnivRs wI iz thAR such tRubl in thu wRld"
 --local phrase = "if god crEAtid thu UnivRs wI iz thAR such tRubl in thu wRld"
-local phrase = "tRubl in "
+local phrase = "tR2u4bl9 in "
 --local phrase = "thu wRld"
 --local phrase = "UnivRs"
 

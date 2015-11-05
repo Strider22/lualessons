@@ -22,51 +22,51 @@ Phonemes = {}
  -- v - multiple frames
  ]]
 Phonemes.phonemeMap = {
-    a = { "ai", "v" },
-    b = { "mbp", "c" },
+    a = { "AI", "v" },
+    b = { "MBP", "c" },
     c = { "etc", "c" },
     d = { "etc", "c" },
-    e = { "e", "v" },
-    f = { "fv", "v" },
+    e = { "E", "v" },
+    f = { "FV", "v" },
     g = { "etc", "c" },
     h = { "etc", "c" },
-    i = { "e", "v" },
+    i = { "E", "v" },
     j = { "etc", "c" },
     k = { "etc", "c" },
-    l = { "l", "v" },
-    m = { "mbp", "v" },
+    l = { "L", "v" },
+    m = { "MBP", "v" },
     n = { "etc", "v" },
-    o = { "o", "v" },
-    p = { "mbp", "c" },
-    q = { "qw", "c" },
+    o = { "O", "v" },
+    p = { "MBP", "c" },
+    q = { "WQ", "v" },
     r = { "etc", "v" },
     s = { "etc", "v" },
     t = { "etc", "c" },
-    u = { "u", "v" },
-    v = { "fv", "v" },
-    w = { "qw", "v" },
+    u = { "U", "v" },
+    v = { "FV", "c" },
+    w = { "WQ", "v" },
     x = { "etc", "v" },
     y = { "etc", "v" },
     z = { "etc", "v" },
-    oo = { "u", "v" },
-    oa = { "o", "v" },
-    ee = { "e", "v" },
-    ea = { "e", "v" },
+    oo = { "U", "v" },
+    oa = { "O", "v" },
+    ee = { "E", "v" },
+    ea = { "E", "v" },
     ch = { "etc", "c" },
     th = { "etc", "v" },
-    gh = { "fv", "v" },
-    ou = { "u", "v" },
-    wh = { "qw", "v" },
-    igh = { "ai", "v" },
-    eigh = { "ai", "v" },
-    A = { "ai", "v" },
-    E = { "e", "v" },
-    I = { "ai", "v" },
-    U = { "o", "v" },
-    R = { "o", "v" }
+    gh = { "FV", "v" },
+    ou = { "U", "v" },
+    wh = { "WQ", "v" },
+    igh = { "AI", "v" },
+    eigh = { "AI", "v" },
+    A = { "AI", "v" },
+    E = { "E", "v" },
+    I = { "AI", "v" },
+    U = { "O", "v" },
+    O = { "O", "v" },
+    R = { "O", "v" }
 }
-
-Phonemes.phonemeSpecials = { wha = { { "qw", "v" }, { "u", "v" } }, out = { { "ai", "v" }, { "o", "v" }, { "etc", "c" } } }
+Phonemes.phonemeSpecials = { wha = { { "WQ", "v" }, { "U", "v" } }, out = { { "AI", "v" }, { "O", "v" }, { "etc", "c" } } }
 
 function Phonemes:findPhonemeInList(phrase, len, stringList)
     return stringList[phrase:sub(1, len)]
@@ -80,14 +80,20 @@ function Phonemes:findNextPhoneme(word)
     if wordLen < len then len = wordLen end
     for i = len, 1, -1 do
         local phrase, remainder = self:splitStringByCount(word, i)
+        if (i == 1) and string.match(phrase:sub(1, 1), '[1-9]') then
+            phoneme = self.lastPhoneme
+            return phoneme, remainder, tonumber(phrase:sub(1,1))
+        end
+
         local phoneme = self:findPhonemeInList(phrase, i, self.phonemeMap)
         if phoneme ~= nil then
-            return phoneme, remainder
+            self.lastPhoneme = phoneme
+            return phoneme, remainder, 1
         end
     end
     -- if the phoneme is not found, assume it's punctuation and return etc
     print("word " .. word .. " not found")
-    return "etc", remainder
+    return "etc", remainder, 1
 end
 
 function Phonemes:splitStringByCount(myString, count)
@@ -107,8 +113,10 @@ end
 function Phonemes:addPhonemesInWordToList(word, phonemeList)
     local phoneme
     while (word ~= "") and (word ~= nil) do
-        phoneme, word = self:findNextPhoneme(word)
-        table.insert(phonemeList, phoneme)
+        phoneme, word, count = self:findNextPhoneme(word)
+        for i=1,count,1 do
+          table.insert(phonemeList, phoneme)
+        end
         --print("phoneme " .. phoneme .. " remainder " .. word)
         --print("phoneme " .. phoneme)
     end
