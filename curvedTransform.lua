@@ -40,6 +40,9 @@ function curvedTransform:Point(x,y,z)
     return self
 end
 
+function curvedTransform:yFromX(radius, x)
+    return radius * math.sin(math.acos(x/radius))
+end
 
 function curvedTransform:Print()
     print("x " .. self.x .. " y " .. self.y .. " z ".. self.z)
@@ -55,3 +58,5 @@ origin:Print()
 curvedTransform:rotatePointX(point, origin, 90)
 
 point:Print()
+
+print("y ".. curvedTransform:yFromX(1.0, .5))
